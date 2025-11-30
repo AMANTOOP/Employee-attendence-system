@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerThunk } from "../../features/auth/authSlice";
-import { Button, TextField, Card, Typography, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Card,
+  Typography,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Stack
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -10,23 +21,42 @@ const Register = () => {
     password: "",
     employeeId: "",
     department: "",
-    role: "employee"   // default
+    role: "employee",
   });
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((s) => s.auth);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(registerThunk(form));
+
     alert("Registered successfully! You can now login.");
+    navigate("/login");
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", justifyContent: "center", alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Card sx={{ width: 400, padding: 3 }}>
         <Typography variant="h5" mb={2} textAlign="center">
           Register
+        </Typography>
+
+        {/* Render free-tier info */}
+        <Typography
+          variant="body2"
+          sx={{ color: "black", mb: 2, textAlign: "center" }}
+        >
+          **Note : If registering after a long time, please wait around a minute —
+          backend on Render free tier wakes from sleep.
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -36,14 +66,6 @@ const Register = () => {
             label="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Employee ID"
-            value={form.employeeId}
-            onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
           />
 
           <TextField
@@ -90,6 +112,17 @@ const Register = () => {
             {loading ? "Registering..." : "Register"}
           </Button>
         </form>
+
+        {/* Navigation buttons */}
+        <Stack direction="row" spacing={2} mt={2}>
+          <Button variant="outlined" fullWidth onClick={() => navigate("/")}>
+            Home
+          </Button>
+
+          <Button variant="outlined" fullWidth onClick={() => navigate("/login")}>
+            Login
+          </Button>
+        </Stack>
       </Card>
     </div>
   );

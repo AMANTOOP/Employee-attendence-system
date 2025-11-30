@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginThunk } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { Button, TextField, Card, Typography } from "@mui/material";
+import { Button, TextField, Card, Typography, Stack } from "@mui/material";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -39,6 +39,15 @@ const Login = () => {
           Login
         </Typography>
 
+        {/* Message about Render free tier */}
+        <Typography
+          variant="body2"
+          sx={{ color: "black", mb: 2, textAlign: "center" }}
+        >
+          **Note : If logging in after a long time, please wait around a minute — the
+          backend is on Render free tier and wakes up from sleep.
+        </Typography>
+
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -60,9 +69,28 @@ const Login = () => {
           {error && <p style={{ color: "red", fontSize: 14 }}>{error}</p>}
 
           <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Please wait..." : "Login"}
           </Button>
         </form>
+
+        {/* Extra navigation buttons */}
+        <Stack direction="row" spacing={2} mt={2}>
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => navigate("/")}
+          >
+            Home
+          </Button>
+
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </Button>
+        </Stack>
       </Card>
     </div>
   );
