@@ -1,23 +1,33 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchEmployeeDashboardThunk,
-  fetchManagerDashboardThunk,
+  loadEmployeeDashboard,
+  loadManagerDashboard,
+  loadWeeklyTrend,
+  loadDepartmentWise
 } from "../features/dashboard/dashboardSlice";
 
 const useDashboard = () => {
   const dispatch = useDispatch();
 
-  const { loading, employeeStats, managerStats } = useSelector(
-    (s) => s.dashboard
-  );
+  const {
+    loading,
+    employeeStats,
+    managerStats,
+    weeklyTrend,
+    departmentWise
+  } = useSelector((s) => s.dashboard);
 
   return {
     loading,
-    employeeStats, // { stats: {...} }
+    employeeStats,
     managerStats,
+    weeklyTrend,
+    departmentWise,
 
-    loadEmployeeStats: () => dispatch(fetchEmployeeDashboardThunk()),
-    loadManagerStats: () => dispatch(fetchManagerDashboardThunk()),
+    loadEmployeeStats: (month) => dispatch(loadEmployeeDashboard(month)),
+    loadManagerStats: () => dispatch(loadManagerDashboard()),
+    loadWeeklyTrend: () => dispatch(loadWeeklyTrend()),
+    loadDepartmentWise: (month) => dispatch(loadDepartmentWise(month))
   };
 };
 

@@ -1,73 +1,104 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchEmployeeStatsApi, fetchManagerStatsApi } from "./dashboardApi";
+import {
+  fetchEmployeeDashboardApi,
+  fetchManagerDashboardApi,
+  fetchWeeklyTrendApi,
+  fetchDepartmentWiseApi
+} from "./dashboardApi";
 
-// ----------- THUNKS -------------
-export const fetchEmployeeDashboardThunk = createAsyncThunk(
-  "dashboard/fetchEmployeeStats",
-  async (_, { rejectWithValue }) => {
+// Employee Dashboard Stats
+export const loadEmployeeDashboard = createAsyncThunk(
+  "dashboard/employee",
+  async (month, { rejectWithValue }) => {
     try {
-      return await fetchEmployeeStatsApi();
+      return await fetchEmployeeDashboardApi(month);
     } catch (err) {
-      return rejectWithValue("Failed to load employee dashboard stats");
+      return rejectWithValue(err.response?.data?.message || "Error");
     }
   }
 );
 
-export const fetchManagerDashboardThunk = createAsyncThunk(
-  "dashboard/fetchManagerStats",
+// Manager Dashboard Stats
+export const loadManagerDashboard = createAsyncThunk(
+  "dashboard/manager",
   async (_, { rejectWithValue }) => {
     try {
-      return await fetchManagerStatsApi();
+      return await fetchManagerDashboardApi();
     } catch (err) {
-      return rejectWithValue("Failed to load manager dashboard stats");
+      return rejectWithValue(err.response?.data?.message || "Error");
     }
   }
 );
 
-// ----------- INITIAL STATE -------------
+// Weekly trend chart
+export const loadWeeklyTrend = createAsyncThunk(
+  "dashboard/weeklyTrend",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await fetchWeeklyTrendApi();
+    } catch (err) {
+      return rejectWithValue("Error loading weekly trend");
+    }
+  }
+);
 
-const initialState = {
-  loading: false,
-  employeeStats: {}, // will store {stats:{}}
-  managerStats: {},  // will store {stats:{}}
-  error: null
-};
-
-// ----------- SLICE -------------
+// Department-wise chart
+export const loadDepartmentWise = createAsyncThunk(
+  "dashboard/departmentWise",
+  async (month, { rejectWithValue }) => {
+    try {
+      return await fetchDepartmentWiseApi(month);
+    } catch (err) {
+      return rejectWithValue("Error loading department data");
+    }
+  }
+);
 
 const dashboardSlice = createSlice({
   name: "dashboard",
-  initialState,
+  initialState: {
+    employeeStats: {},
+    managerStats: {},
+    weeklyTrend: [],
+    departmentWise: [],
+    loading: false,
+    error: null
+  },
   reducers: {},
   extraReducers: (builder) => {
-    // Employee Dashboard
     builder
-      .addCase(fetchEmployeeDashboardThunk.pending, (state) => {
-        state.loading = true;
+      // Employee
+      .addCase(loadEmployeeDashboard.pending, (s) => { s.loading = true })
+      .addCase(loadEmployeeDashboard.fulfilled, (s, a) => {
+        s.loading = false;
+        s.employeeStats = a.payload;
       })
-      .addCase(fetchEmployeeDashboardThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.employeeStats = action.payload; // {stats:{}}
+      .addCase(loadEmployeeDashboard.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload;
       })
-      .addCase(fetchEmployeeDashboardThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
 
-    // Manager Dashboard
-    builder
-      .addCase(fetchManagerDashboardThunk.pending, (state) => {
-        state.loading = true;
+      // Manager
+      .addCase(loadManagerDashboard.pending, (s) => { s.loading = true })
+      .addCase(loadManagerDashboard.fulfilled, (s, a) => {
+        s.loading = false;
+        s.managerStats = a.payload;
       })
-      .addCase(fetchManagerDashboardThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.managerStats = action.payload; // {stats:{}}
+      .addCase(loadManagerDashboard.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload;
       })
-      .addCase(fetchManagerDashboardThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+
+      // Weekly Trend
+      .addCase(loadWeeklyTrend.fulfilled, (s, a) => {
+        s.weeklyTrend = a.payload.trend;
+      })
+
+      // Department-wise
+      .addCase(loadDepartmentWise.fulfilled, (s, a) => {
+        s.departmentWise = a.payload.departments;
       });
-  }
+  },
 });
 
 export default dashboardSlice.reducer;

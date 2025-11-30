@@ -1,13 +1,25 @@
 import api from "../../api/axios";
 
-// Employee Dashboard Stats
-export const fetchEmployeeStatsApi = async () => {
-  const res = await api.get("/dashboard/employee");
+// Employee Dashboard
+export const fetchEmployeeDashboardApi = async (month) => {
+  const res = await api.get(`/dashboard/employee?month=${month}`);
   return res.data;
 };
 
-// Manager Dashboard Stats
-export const fetchManagerStatsApi = async () => {
-  const res = await api.get("/dashboard/manager");
+// Manager Dashboard
+export const fetchManagerDashboardApi = async () => {
+  const res = await api.get(`/dashboard/manager`);
+  return res.data;
+};
+
+// Weekly Trend (chart)
+export const fetchWeeklyTrendApi = async (days = 7) => {
+  const res = await api.get(`/dashboard/weekly-trend?days=${days}`);
+  return res.data;
+};
+
+// Department-wise attendance (chart)
+export const fetchDepartmentWiseApi = async (dateOrMonth) => {
+  const res = await api.get(`/dashboard/department-wise?month=${dateOrMonth}`);
   return res.data;
 };

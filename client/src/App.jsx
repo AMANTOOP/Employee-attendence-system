@@ -15,12 +15,14 @@ import Reports from "./pages/manager/Reports";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import Home from "./pages/auth/Home";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         {/* AUTH */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
