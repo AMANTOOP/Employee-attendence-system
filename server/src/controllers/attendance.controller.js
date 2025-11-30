@@ -269,3 +269,34 @@ exports.exportCSV = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.myStatus = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const todayStr = attendanceService.formatDateStr(new Date());
+    const att = await Attendance.findOne({ userId, date: todayStr });
+
+    if (!att) {
+      return res.json({
+        date: todayStr,
+        status: "Not checked in",
+        checkInTime: null,
+        checkOutTime: null,
+        totalHours: null
+      });
+    }
+
+    res.json({
+      date: att.date,
+      status: att.status,
+      checkInTime: att.checkInTime,
+      checkOutTime: att.checkOutTime,
+      totalHours: att.totalHours
+    });
+
+  } catch (err) {
+    next(err);
+  }
+};
+

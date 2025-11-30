@@ -9,6 +9,8 @@ router.post('/checkin', auth, attendanceController.checkIn);
 router.post('/checkout', auth, attendanceController.checkOut);
 router.get('/my-history', auth, attendanceController.myHistory);
 router.get('/my-summary', auth, attendanceController.mySummary);
+router.get('/today', auth, attendanceController.myStatus);
+
 
 // manager endpoints (basic role check inside controller)
 router.get('/all', auth, attendanceController.allAttendance);
