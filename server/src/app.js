@@ -5,12 +5,16 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth.routes');
 const attendanceRoutes = require('./routes/attendance.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
 const errorHandler = require('./middleware/error.middleware');
 
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json());
 
 // Basic root health check
@@ -21,6 +25,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Error handler (should be last)
 app.use(errorHandler);
