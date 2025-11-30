@@ -300,3 +300,71 @@ exports.myStatus = async (req, res, next) => {
   }
 };
 
+// ---------- Employee endpoints ----------
+
+// Enhanced mySummary (returns object with counts)
+exports.mySummary = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { month } = req.query; // required YYYY-MM
+    if (!month) return res.status(400).json({ message: 'month required as YYYY-MM' });
+
+    const summary = await attendanceService.getUserMonthlySummary(user._id, month);
+    res.json({ month, summary });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.myHours = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { month } = req.query;
+    if (!month) return res.status(400).json({ message: 'month required as YYYY-MM' });
+
+    const totalHours = await attendanceService.getUserMonthlyHours(user._id, month);
+    res.json({ month, totalHours });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.myLast7 = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const n = Number(req.query.n) || 7;
+    const data = await attendanceService.getUserLastNDays(user._id, n);
+    res.json({ days: data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ---------------- Manager endpoints ----------------
+
+// GET /api/attendance/today-summary
+exports.todaySummary = async (req, res, next) => {
+  try {
+    if (!req.user || req.user.role !== 'manager') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    const summary = await attendanceService.getTodaySummary();
+    res.json(summary);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/attendance/absent-today
+exports.absentToday = async (req, res, next) => {
+  try {
+    if (!req.user || req.user.role !== 'manager') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    const result = await attendanceService.getAbsentEmployeesToday();
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
