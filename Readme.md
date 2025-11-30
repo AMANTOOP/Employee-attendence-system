@@ -1,7 +1,7 @@
 
 # Employee Attendance System
 
-A full-stack attendance tracking system supporting two roles — **Employee** and **Manager** — built using Node.js, Express, MongoDB/PostgreSQL, React, and Redux/Zustand.  
+A full-stack attendance tracking system supporting two roles — **Employee** and **Manager** — built using Node.js, Express, MongoDB, React, and Redux Toolkit.  
 
 ---
 
@@ -15,14 +15,14 @@ A full-stack attendance tracking system supporting two roles — **Employee** an
 #### Backend
 
 ```bash
-cd backend
+cd server
 npm install
 ```
 
 #### Frontend
 
 ```bash
-cd ../frontend
+cd ../client
 npm install
 ```
 
@@ -36,15 +36,18 @@ Create a `.env` file in the **backend** folder (refer `.env.example`):
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRES_IN=7d
-CORS_ORIGIN=http://localhost:3000
+JWT_EXPIRES_IN=15m
+REFRESH_TOKEN_EXPIRES_IN=7d
+BCRYPT_SALT_ROUNDS=10
+OFFICE_START_TIME=09:30
+LATE_GRACE_MINUTES=10
 ```
 
 
-Frontend `.env.local`:
+Frontend `.env`:
 
 ```
-NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
@@ -54,7 +57,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api
 ### **Start Backend**
 
 ```bash
-cd backend
+cd server
 npm run dev
 ```
 
@@ -63,11 +66,11 @@ Backend runs at: **[http://localhost:5000](http://localhost:5000)**
 ### **Start Frontend**
 
 ```bash
-cd frontend
+cd client
 npm run dev
 ```
 
-Frontend runs at: **[http://localhost:3000](http://localhost:3000)**
+Frontend runs at: **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
@@ -79,30 +82,29 @@ Frontend runs at: **[http://localhost:3000](http://localhost:3000)**
 | `MONGO_URI`                | MongoDB connection string          |
 | `JWT_SECRET`               | Secret for JWT signing             |
 | `JWT_EXPIRES_IN`           | Token validity duration            |
-| `CORS_ORIGIN`              | Allowed frontend URL               |
-| `DATABASE_URL`             | PostgreSQL URL (if using Postgres) |
-| `NEXT_PUBLIC_API_BASE_URL` | Frontend base API URL              |
+| `VITE_API_URL`             | Frontend base API URL              |
 
+
+---
+## 🔑 Demo Login Credentials
+
+Use the following test accounts to explore the system:
+
+### 🧑‍💼 Manager Account
+- **Email:** admin1@example.com  
+- **Password:** 123456  
+
+### 👨‍💻 Employee Account
+- **Email:** employee2@test.com  
+- **Password:** 123456  
+
+> These accounts are for demo/testing purposes only. Please update or remove them in production.
 
 ---
 
 ## 🖼️ Screenshots
 
-Add the following screenshots inside `/screenshots` folder:
 
-```
-/screenshots
- ├── employee-dashboard.png
- ├── manager-dashboard.png
- ├── attendance-history.png
- ├── login.png
- ├── checkin.png
- └── reports.png
-```
-
-Example Markdown:
-
-```md
 ### Employee Dashboard
 ![Employee Dashboard](./screenshots/employee-dashboard.png)
 
@@ -112,16 +114,19 @@ Example Markdown:
 ### Attendance History
 ![History](./screenshots/attendance-history.png)
 
-### Login Page
-![Login](./screenshots/login.png)
-```
+### Home Page
+![Login](./screenshots/home.png)
 
----
 
-If you want, I can also:
+## 📬 Contact Information
 
-✅ Generate a **perfect `.env.example` file**
-✅ Generate **API documentation section**
-✅ Write a **more polished README with badges, live demo, folder structure, seed instructions**
+If you have any questions, need clarification, or want to discuss improvements, feel free to reach out:
 
-Just tell me!
+**Name:** Aman Kumar Prasad  
+**College:** AU college of engineering<br>
+**Contact No:** +91 9704274571  
+
+
+
+
+
