@@ -1,40 +1,72 @@
 import { useState } from "react";
 import api from "../../api/axios";
-import { Typography, Button, TextField, Card } from "@mui/material";
+import { Typography, Card, TextField, Button } from "@mui/material";
 
 const Reports = () => {
-  const [dateRange, setDateRange] = useState({ from: "", to: "" });
+  const [filters, setFilters] = useState({
+    from: "",
+    to: "",
+    employeeId: "",
+  });
 
-  const exportCSV = async () => {
-    window.open(`${import.meta.env.VITE_API_URL}/attendance/export?from=${dateRange.from}&to=${dateRange.to}`);
+  const downloadCSV = async () => {
+    try {
+      const query = new URLSearchParams(filters).toString();
+
+      const response = await api.get(`/attendance/export?${query}`, {
+        responseType: "blob", // important
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "attendance.csv");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Export error:", err);
+    }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <Typography variant="h4" mb={2}>Reports</Typography>
+    <div>
+      <Typography variant="h4" mb={3}>
+        Attendance Reports
+      </Typography>
 
-      <Card sx={{ padding: 3, width: 400 }}>
+      <Card sx={{ p: 3, width: 400 }}>
         <TextField
+          label="Employee ID"
+          value={filters.employeeId}
+          onChange={(e) =>
+            setFilters({ ...filters, employeeId: e.target.value })
+          }
           fullWidth
+          sx={{ mb: 2 }}
+        />
+
+        <TextField
           type="date"
           label="From"
-          margin="dense"
-          value={dateRange.from}
-          onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
           InputLabelProps={{ shrink: true }}
+          value={filters.from}
+          onChange={(e) => setFilters({ ...filters, from: e.target.value })}
+          fullWidth
+          sx={{ mb: 2 }}
         />
 
         <TextField
-          fullWidth
           type="date"
           label="To"
-          margin="dense"
-          value={dateRange.to}
-          onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
           InputLabelProps={{ shrink: true }}
+          value={filters.to}
+          onChange={(e) => setFilters({ ...filters, to: e.target.value })}
+          fullWidth
+          sx={{ mb: 2 }}
         />
 
-        <Button sx={{ mt: 2 }} variant="contained" fullWidth onClick={exportCSV}>
+        <Button variant="contained" fullWidth onClick={downloadCSV}>
           Export CSV
         </Button>
       </Card>

@@ -40,7 +40,9 @@ const App = () => {
           path="/employee/mark"
           element={
             <ProtectedRoute role="employee">
+              <Layout>
               <MarkAttendance />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -49,7 +51,9 @@ const App = () => {
           path="/employee/history"
           element={
             <ProtectedRoute role="employee">
+              <Layout>
               <MyHistory />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -58,7 +62,9 @@ const App = () => {
           path="/employee/profile"
           element={
             <ProtectedRoute role="employee">
+              <Layout>
               <Profile />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -68,7 +74,9 @@ const App = () => {
           path="/manager/dashboard"
           element={
             <ProtectedRoute role="manager">
+              <Layout>
               <ManagerDashboard />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -77,7 +85,9 @@ const App = () => {
           path="/manager/employees"
           element={
             <ProtectedRoute role="manager">
+              <Layout>
               <AllEmployees />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -86,7 +96,9 @@ const App = () => {
           path="/manager/calendar"
           element={
             <ProtectedRoute role="manager">
+              <Layout>
               <TeamCalendar />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -95,7 +107,9 @@ const App = () => {
           path="/manager/reports"
           element={
             <ProtectedRoute role="manager">
+              <Layout>
               <Reports />
+              </Layout>
             </ProtectedRoute>
           }
         />

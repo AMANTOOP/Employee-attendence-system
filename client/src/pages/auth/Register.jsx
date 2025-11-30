@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerThunk } from "../../features/auth/authSlice";
-import { Button, TextField, Card, Typography } from "@mui/material";
+import { Button, TextField, Card, Typography, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -9,7 +9,8 @@ const Register = () => {
     email: "",
     password: "",
     employeeId: "",
-    department: ""
+    department: "",
+    role: "employee"   // default
   });
 
   const dispatch = useDispatch();
@@ -52,6 +53,19 @@ const Register = () => {
             value={form.department}
             onChange={(e) => setForm({ ...form, department: e.target.value })}
           />
+
+          {/* Role Selection */}
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Role</InputLabel>
+            <Select
+              value={form.role}
+              label="Role"
+              onChange={(e) => setForm({ ...form, role: e.target.value })}
+            >
+              <MenuItem value="employee">Employee</MenuItem>
+              <MenuItem value="manager">Manager</MenuItem>
+            </Select>
+          </FormControl>
 
           <TextField
             fullWidth

@@ -7,11 +7,13 @@ import {
 const useDashboard = () => {
   const dispatch = useDispatch();
 
-  const { loading, employeeStats, managerStats } = useSelector((s) => s.dashboard);
+  const { loading, employeeStats, managerStats } = useSelector(
+    (s) => s.dashboard
+  );
 
   return {
     loading,
-    employeeStats,
+    employeeStats, // { stats: {...} }
     managerStats,
 
     loadEmployeeStats: () => dispatch(fetchEmployeeDashboardThunk()),
