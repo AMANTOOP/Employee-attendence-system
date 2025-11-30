@@ -1,0 +1,17 @@
+// src/routes/attendance.routes.js
+const express = require('express');
+const router = express.Router();
+const attendanceController = require('../controllers/attendance.controller');
+const auth = require('../middleware/auth.middleware');
+
+// employee actions
+router.post('/checkin', auth, attendanceController.checkIn);
+router.post('/checkout', auth, attendanceController.checkOut);
+router.get('/my/history', auth, attendanceController.myHistory);
+router.get('/my/summary', auth, attendanceController.mySummary);
+
+// manager endpoints (basic role check inside controller)
+router.get('/all', auth, attendanceController.allAttendance);
+router.get('/today/status', auth, attendanceController.todayStatus);
+
+module.exports = router;
